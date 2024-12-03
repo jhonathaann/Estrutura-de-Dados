@@ -1,0 +1,251 @@
+package AB;
+import java.util.Random;
+
+public class ArvoreBinaria<T> {
+    NoAB<T> raiz;  // a raiz da nossa arvore
+    private static Random rand = new Random();
+
+    // inicializando a Arvore
+    public ArvoreBinaria(){
+        this.raiz = null;
+    }
+
+    public void insercaoAleatoria(T valor){
+
+        boolean insercao = false;  // variavel que ira guardar quando realizamos a inserçao
+
+        // se a minha raiz esta vazia, eu irei inserir nela
+        if(raiz == null){
+            raiz = new NoAB<T>(valor);
+        }else{
+
+            // preciso de uma variavel aux para percorrer a minha arvore
+            NoAB<T> aux = raiz;
+
+            while(insercao == false){
+
+                // se for true, vamos para o no a esquerda
+                if(rand.nextBoolean() == true){
+
+                    // se o no a esquerda do meu atual for nulo, insere
+                    if(aux.esquerda == null){
+                        aux.esquerda = new NoAB<T>(valor);
+                        insercao = true;
+                    }else{
+                        // senao, caminha pela esquerda
+                        aux = aux.esquerda;
+                    }
+                }else{
+                    // vamos para a direita do meu no atual
+                    // se o no a direita do meu atual for nulo, insere
+                    if(aux.direita == null){
+                        aux.direita = new NoAB<T>(valor);
+                        insercao = true;
+                    }else{
+
+                        // senao, caminha pela direita da minha arvore
+                        aux = aux.direita;
+                    }
+                }
+
+            }
+        }
+    }
+
+
+    public boolean busca(T valor){
+        return busca(raiz, valor);
+    }
+
+    private boolean busca(NoAB<T> raiz, T valor){
+
+        if(raiz == null){
+            return false;
+        }
+
+        if(raiz.valor == valor){
+            return true;
+        }
+
+        if(busca(raiz.direita, valor) == true){
+            return true;
+        }
+
+        if(busca(raiz.esquerda, valor) == true){
+            return true;
+        }
+
+        return false;
+    }
+
+    public String toString() {
+
+        StringBuilder out = new StringBuilder();
+
+        if (raiz == null) {
+
+            out.append("<null>\n");
+
+        }
+
+        else {
+
+            toString(raiz.direita, "", false, out);
+
+            out.append(raiz.valor.toString() + "\n");
+
+            toString(raiz.esquerda, "", true, out);
+
+            out.append("\n");
+
+        }
+
+        return out.toString();
+
+    }
+
+    
+
+    private void toString(NoAB<T> node, String prefix, boolean leftChild, StringBuilder out) {
+
+        if (node == null)
+
+            return;
+
+        if (leftChild) {
+
+            toString(node.direita, prefix + "| ", false, out);
+
+            out.append(prefix + "|>" + node.valor.toString() + "\n");
+
+            toString(node.esquerda, prefix + " ", true, out);
+
+        }
+
+        else {
+
+            toString(node.direita, prefix + " ", false, out);
+
+            out.append(prefix + "|>" + node.valor.toString() + "\n");
+
+            toString(node.esquerda, prefix + "| ", true, out);
+
+        }
+
+    }
+}
+
+
+package ABB;
+
+public  class ArvoreBinariaBusca<T extends Comparable<T>>{
+    TipoABB<T> raiz;
+
+
+    public ArvoreBinariaBusca(){
+        this.raiz = null;
+    }
+    
+}
+
+
+package ABB;
+
+public class ArvoreBinariaBusca {
+    TipoABB raiz;
+    int quantidadeNos;
+
+    // de inicio, minha arvore esta vazia
+    public ArvoreBinariaBusca(){
+        this.raiz = null;
+        this.quantidadeNos = 0;
+    }
+
+    public void insercao(int valor){
+
+        // se a arvore esta vazia, a insercao sera neste no
+        if(raiz == null){
+            raiz = new TipoABB(valor);
+            quantidadeNos++;
+
+        }else{
+
+            insercaoRecursiva(raiz, valor);
+        }
+    }
+
+    public void insercaoRecursiva(TipoABB noAtual, int valor){
+
+        // se o valor eh menor que o meua atual, eu vou para a esquerda
+        if(valor < noAtual.valor){
+
+            // se o atual seta esquerda for nulo, eu insiro nele
+            if(noAtual.esquerda == null){
+                noAtual.esquerda = new TipoABB(valor);
+            }else{
+
+                // senao, eu nao estou em uma folha, ent eu faço a chamada recursiva
+                insercaoRecursiva(noAtual.esquerda, valor);
+            }
+            
+        }else{
+            // se o atual seta direita for nulo, eu estou em uma folha
+            if(noAtual.direita == null){
+                noAtual.direita = new TipoABB(valor);
+            }else{
+
+                //senao, eu faço a chamada recursiva
+                insercaoRecursiva(noAtual.direita, valor);
+            }
+            
+        }
+    }
+
+    public TipoABB busca(TipoABB raiz, int valor){
+
+        if(raiz != null){
+            if(raiz.valor == valor){
+                return raiz;
+            }else if(valor < raiz.valor){
+                return busca(raiz.esquerda, valor);  // prucura na subarvore a esquerda
+            }else{
+                return busca(raiz.direita, valor);   // procura na subarvore a direita
+            }
+        }
+
+        return null; // elemento nao encontrado
+        
+    }
+
+    public void imprimir(TipoABB raiz){
+
+        if(raiz != null){
+            System.out.printf("%d ", raiz.valor);
+
+            imprimir(raiz.direita);
+
+            imprimir(raiz.esquerda);
+        }
+    }
+
+    public void imprimirOrdenado(TipoABB raiz){
+        if(raiz != null){
+            imprimirOrdenado(raiz.esquerda);
+
+            System.out.printf("%d ", raiz.valor);
+
+            imprimirOrdenado(raiz.direita);
+        }
+    }
+
+    public int quantNos(TipoABB raiz){
+
+        if(raiz == null){
+            return 0;
+        }else{
+
+            return 1 + quantNos(raiz.direita) + quantNos(raiz.esquerda);
+        }
+    }
+
+}
