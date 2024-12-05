@@ -10,6 +10,7 @@ public class TesteTabelaHash {
         testHash.insercao(3, "jose");
         testHash.insercao(3, "luis");
         testHash.insercao(1, "luis");
+        testHash.insercao(1, "teste");
 
         testHash.print();
 
